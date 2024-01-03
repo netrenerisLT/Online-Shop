@@ -5,6 +5,8 @@ const db = require("./data/database");
 const csrf = require("csurf");
 const addCsrfTokenMiddleware = require("./middlewares/csrf-token");
 const errorHandlerMiddleware = require("./middlewares/error-handler");
+const expressSession = require("express-session");
+const createSessionConfig = require("./config/session");
 
 const app = express();
 
@@ -18,6 +20,8 @@ app.use(express.static("public"));
 //handle data attached to forms and requests
 app.use(express.urlencoded({ extended: false }));
 
+app.use(expressSession(createSessionConfig()));
+
 // Add csrf protection
 app.use(csrf());
 app.use(addCsrfTokenMiddleware);
@@ -25,6 +29,7 @@ app.use(addCsrfTokenMiddleware);
 // enable routes
 app.use(authRoutes);
 
+// enable error handling when something wrong with the server
 app.use(errorHandlerMiddleware);
 
 db.connectDatabase()
