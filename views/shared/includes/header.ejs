@@ -1,4 +1,10 @@
 <header>
   <div><a href="/">WDDE</a></div>
-  <nav></nav>
+  <nav>
+    <ul>
+      <% if (locals.isAuth) { %>
+      <li><button>Logout</button></li>
+      <% } %>
+    </ul>
+  </nav>
 </header>

@@ -1,12 +1,15 @@
-const express = require("express");
-const authRoutes = require("./routes/auth.routes");
-const path = require("path");
-const db = require("./data/database");
-const csrf = require("csurf");
-const addCsrfTokenMiddleware = require("./middlewares/csrf-token");
-const errorHandlerMiddleware = require("./middlewares/error-handler");
-const expressSession = require("express-session");
-const createSessionConfig = require("./config/session");
+const express = require("express"); //1
+const authRoutes = require("./routes/auth.routes"); //2
+const productsRoutes = require("./routes/products.routes"); //7
+const baseRoutes = require("./routes/base.routes"); //7
+const path = require("path"); //3
+const db = require("./data/database"); //3
+const csrf = require("csurf"); //4
+const addCsrfTokenMiddleware = require("./middlewares/csrf-token"); //4
+const errorHandlerMiddleware = require("./middlewares/error-handler"); //5
+const checkAuthStatusMiddleware = require("./middlewares/check-auth"); //8
+const expressSession = require("express-session"); //6
+const createSessionConfig = require("./config/session"); //6
 
 const app = express();
 
@@ -26,8 +29,12 @@ app.use(expressSession(createSessionConfig()));
 app.use(csrf());
 app.use(addCsrfTokenMiddleware);
 
+app.use(checkAuthStatusMiddleware);
+
 // enable routes
 app.use(authRoutes);
+app.use(productsRoutes);
+app.use(baseRoutes);
 
 // enable error handling when something wrong with the server
 app.use(errorHandlerMiddleware);
