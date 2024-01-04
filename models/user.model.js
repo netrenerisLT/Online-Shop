@@ -29,11 +29,19 @@ class User {
       email: this.email,
     });
   }
+
+  async existingEmailAlready() {
+    const existingUser = await this.getUserWithSameEmail();
+    if (existingUser) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   comparePassword(hashedPassword) {
     return bcrypt.compare(this.password, hashedPassword);
   }
-
-  async login() {}
 }
 
 module.exports = User;

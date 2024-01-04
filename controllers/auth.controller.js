@@ -1,12 +1,29 @@
 const User = require("../models/user.model");
 const authentication = require("../util/authentication");
+const validation = require("../util/validations");
 
 function getSignup(req, res, next) {
   res.render("customer/auth/signup");
 }
 
-async function signup(req, res) {
+async function signup(req, res, next) {
   const data = req.body;
+
+  if (
+    !validation.userDetailsAreValid(
+      data.email,
+      data.password,
+      data.fullname,
+      data.street,
+      data.postal,
+      data.city
+    ) ||
+    !validation.emailMatches(data.email, data["confirm-email"])
+  ) {
+    res.redirect("/signup");
+    return;
+  }
+
   const user = new User(
     data.email,
     data.password,
@@ -16,7 +33,19 @@ async function signup(req, res) {
     data.city
   );
 
-  await user.signup();
+  try {
+    const existEmailAlready = await user.existingEmailAlready();
+
+    if (existEmailAlready) {
+      res.redirect("/signup");
+      return;
+    }
+
+    await user.signup();
+  } catch (error) {
+    return next(error);
+  }
+
   res.redirect("/login");
 }
 
@@ -24,9 +53,15 @@ function getLogin(req, res, next) {
   res.render("customer/auth/login");
 }
 
-async function login(req, res) {
+async function login(req, res, next) {
   const user = new User(req.body.email, req.body.password);
-  const existingUser = await user.getUserWithSameEmail();
+  let existingUser;
+
+  try {
+    existingUser = await user.getUserWithSameEmail();
+  } catch (error) {
+    return next(error);
+  }
 
   if (!existingUser) {
     res.redirect("/login");
