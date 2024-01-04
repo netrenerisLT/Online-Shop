@@ -2,6 +2,7 @@ const express = require("express"); //1
 const authRoutes = require("./routes/auth.routes"); //2
 const productsRoutes = require("./routes/products.routes"); //7
 const baseRoutes = require("./routes/base.routes"); //7
+const adminRoutes = require("./routes/admin.routes"); //9
 const path = require("path"); //3
 const db = require("./data/database"); //3
 const csrf = require("csurf"); //4
@@ -35,6 +36,7 @@ app.use(checkAuthStatusMiddleware);
 app.use(authRoutes);
 app.use(productsRoutes);
 app.use(baseRoutes);
+app.use("/admin", adminRoutes);
 
 // enable error handling when something wrong with the server
 app.use(errorHandlerMiddleware);

@@ -73,6 +73,12 @@ a {
   border-radius: var(--border-radius-small);
 }
 
+.btn-alt {
+  border: 1px solid var(--color-primary-100);
+  background-color: transparent;
+  color: var(--color-primary-100);
+}
+
 .btn:hover,
 .btn:active {
   background-color: var(--color-primary-700);
