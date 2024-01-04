@@ -1,20 +1,38 @@
 <%- include("../../shared/includes/head", {pageTitle: "Signup"}) %>
-<link rel="stylesheet" href="/styles/forms.css">
-<link rel="stylesheet" href="/styles/auth.css">
+<link rel="stylesheet" href="/styles/forms.css" />
+<link rel="stylesheet" href="/styles/auth.css" />
 </head>
 <body>
   <%- include("../../shared/includes/header") %>
   <main>
     <h1>Create New Account</h1>
+    <% if (sessionData.errorMessage) { %>
+    <section class="alert">
+      <h2>Invalid input</h2>
+      <p><%= sessionData.errorMessage %></p>
+    </section>
+    <% } %>
     <form action="/signup" method="POST">
-        <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
+      <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>" />
       <p>
         <label for="email">Email</label>
-        <input type="email" id="email" name="email" required />
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value="<%= sessionData.email %>"
+          required
+        />
       </p>
       <p>
         <label for="confirm-email">Confirm Email</label>
-        <input type="email" id="confirm-email" name="confirm-email" required />
+        <input
+          type="email"
+          id="confirm-email"
+          name="confirm-email"
+          value="<%= sessionData.confirmEmail %>"
+          required
+        />
       </p>
       <p>
         <label for="password">Password</label>
@@ -23,28 +41,53 @@
           id="password"
           name="password"
           minlength="6"
+          value="<%= sessionData.password %>"
           required
         />
       </p>
       <hr />
       <p>
         <label for="fullname">Full name</label>
-        <input type="text" id="fullname" name="fullname" required />
+        <input
+          type="text"
+          id="fullname"
+          name="fullname"
+          value="<%= sessionData.fullname %>"
+          required
+        />
       </p>
       <p>
         <label for="street">Street</label>
-        <input type="text" id="street" name="street" required />
+        <input
+          type="text"
+          id="street"
+          name="street"
+          value="<%= sessionData.street %>"
+          required
+        />
       </p>
       <p>
         <label for="postal">Postal Code</label>
-        <input type="text" id="postal" name="postal" required />
+        <input
+          type="text"
+          id="postal"
+          name="postal"
+          value="<%= sessionData.postal %>"
+          required
+        />
       </p>
       <p>
         <label for="city">City</label>
-        <input type="text" id="city" name="city" required />
+        <input
+          type="text"
+          id="city"
+          name="city"
+          value="<%= sessionData.city %>"
+          required
+        />
       </p>
       <button class="btn">Create Account</button>
       <p id="switch-form"><a href="/login">Login instead</a></p>
     </form>
   </main>
-<%- include("../../shared/includes/footer") %>
+  <%- include("../../shared/includes/footer") %>

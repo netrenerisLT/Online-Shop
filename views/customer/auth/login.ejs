@@ -6,11 +6,17 @@
   <%- include("../../shared/includes/header") %>
   <main>
     <h1>Login To <Adr></Adr>ccount</h1>
+    <% if (sessionData.errorMessage) { %>
+      <section class="alert">
+        <h2>Invalid input</h2>
+        <p><%= sessionData.errorMessage %></p>
+      </section>
+      <% } %>
     <form action="/login" method="POST">
         <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
       <p>
         <label for="email">Email</label>
-        <input type="email" id="email" name="email" required />
+        <input type="email" id="email" name="email" value="<%= sessionData.email %>" required />
       </p>
       <p>
         <label for="password">Password</label>
@@ -18,7 +24,6 @@
           type="password"
           id="password"
           name="password"
-          minlength="6"
           required
         />
       </p>

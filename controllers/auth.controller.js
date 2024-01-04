@@ -1,43 +1,84 @@
 const User = require("../models/user.model");
 const authentication = require("../util/authentication");
 const validation = require("../util/validations");
+const sessionFlash = require("../util/session-flash");
 
 function getSignup(req, res, next) {
-  res.render("customer/auth/signup");
+  let sessionData = sessionFlash.getSessionData(req);
+
+  if (!sessionData) {
+    sessionData = {
+      email: "",
+      confirmEmail: "",
+      password: "",
+      fullname: "",
+      street: "",
+      postal: "",
+      city: "",
+    };
+  }
+
+  res.render("customer/auth/signup", { sessionData: sessionData });
 }
 
 async function signup(req, res, next) {
-  const data = req.body;
+  const enteredData = {
+    email: req.body.email,
+    confirmEmail: req.body["confirm-email"],
+    password: req.body.password,
+    fullname: req.body.fullname,
+    street: req.body.street,
+    postal: req.body.postal,
+    city: req.body.city,
+  };
 
   if (
     !validation.userDetailsAreValid(
-      data.email,
-      data.password,
-      data.fullname,
-      data.street,
-      data.postal,
-      data.city
+      req.body.email,
+      req.body.password,
+      req.body.fullname,
+      req.body.street,
+      req.body.postal,
+      req.body.city
     ) ||
-    !validation.emailMatches(data.email, data["confirm-email"])
+    !validation.emailMatches(req.body.email, req.body["confirm-email"])
   ) {
-    res.redirect("/signup");
+    sessionFlash.flashDataToSession(
+      req,
+      {
+        errorMessage: "Please check your input.",
+        ...enteredData,
+      },
+      function () {
+        res.redirect("/signup");
+      }
+    );
     return;
   }
 
   const user = new User(
-    data.email,
-    data.password,
-    data.fullname,
-    data.street,
-    data.postal,
-    data.city
+    req.body.email,
+    req.body.password,
+    req.body.fullname,
+    req.body.street,
+    req.body.postal,
+    req.body.city
   );
 
   try {
     const existEmailAlready = await user.existingEmailAlready();
 
     if (existEmailAlready) {
-      res.redirect("/signup");
+      sessionFlash.flashDataToSession(
+        req,
+        {
+          errorMessage: "User already exists.",
+          ...enteredData,
+        },
+        function () {
+          res.redirect("/signup");
+        }
+      );
       return;
     }
 
@@ -50,7 +91,14 @@ async function signup(req, res, next) {
 }
 
 function getLogin(req, res, next) {
-  res.render("customer/auth/login");
+  let sessionData = sessionFlash.getSessionData(req);
+  if (!sessionData) {
+    sessionData = {
+      email: "",
+    };
+  }
+
+  res.render("customer/auth/login", { sessionData: sessionData });
 }
 
 async function login(req, res, next) {
@@ -63,15 +111,21 @@ async function login(req, res, next) {
     return next(error);
   }
 
+  const sessionErrorData = {
+    errorMessage: "Invalid credentials, please check email and password.",
+    email: user.email,
+  };
   if (!existingUser) {
-    res.redirect("/login");
+    sessionFlash.flashDataToSession(req, sessionErrorData, function () {
+      res.redirect("/login");
+    });
     return;
   }
-
   const passwordMatch = await user.comparePassword(existingUser.password);
-
   if (!passwordMatch) {
-    res.redirect("/login");
+    sessionFlash.flashDataToSession(req, sessionErrorData, function () {
+      res.redirect("/login");
+    });
     return;
   }
 
