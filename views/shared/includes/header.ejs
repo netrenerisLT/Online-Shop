@@ -2,12 +2,28 @@
   <div><a href="/">WDDE</a></div>
   <nav>
     <ul>
+
+      <li><a href="/">Shop</a></li>
+      <li><a href="/cart">Cart</a></li>
+
+      <% if (locals.isAdmin) { %>
+      <li><a href="/admin/products">Manage Produts</a></li>
+      <li><a href="/admin/orders">Manage Orders</a></li>
+      <% } %>
+
+      <% if (!locals.isAuth) { %>
+        <li><a href="/signup">Signup</a></li>
+        <li><a href="/login">Login</a></li>
+        <% } %>
+      
       <% if (locals.isAuth) { %>
+      <li><a href="/orders">Your Orders</a></li>
       <form action="/logout" method="POST">
         <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>" />
         <button>Logout</button>
       </form>
       <% } %>
+
     </ul>
   </nav>
 </header>
