@@ -3,7 +3,7 @@ h1 {
   color: var(--color-gray-300);
 }
 
-form {
+main form {
   max-width: 25rem;
   margin: var(--space-8) auto;
   padding: var(--space-4);
