@@ -11,5 +11,15 @@
         <a href="/admin/products/new" class="btn">Add Product</a>
       </p>
     </section>
+    <section>
+      <ul>
+        <% for (const product of products) { %>
+            <li>
+                <%- include("includes/product-item", {product: product}) %>
+            </li>
+            <% } %>
+      </ul>
+      <p>product list</p>
+    </section>
   </main>
   <%- include("../../shared/includes/footer") %>

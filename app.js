@@ -20,6 +20,7 @@ app.set("views", path.join(__dirname, "views"));
 
 //sets access of CSS files to public
 app.use(express.static("public"));
+app.use("/products/assets", express.static("product-data"));
 
 //handle data attached to forms and requests
 app.use(express.urlencoded({ extended: false }));
