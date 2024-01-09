@@ -9,6 +9,7 @@ const csrf = require("csurf"); //4
 const addCsrfTokenMiddleware = require("./middlewares/csrf-token"); //4
 const errorHandlerMiddleware = require("./middlewares/error-handler"); //5
 const checkAuthStatusMiddleware = require("./middlewares/check-auth"); //8
+const protectRoutesMiddleware = require("./middlewares/protect-routes");
 const expressSession = require("express-session"); //6
 const createSessionConfig = require("./config/session"); //6
 
@@ -37,6 +38,8 @@ app.use(checkAuthStatusMiddleware);
 app.use(authRoutes);
 app.use(productsRoutes);
 app.use(baseRoutes);
+app.use(protectRoutesMiddleware);
+
 app.use("/admin", adminRoutes);
 
 // enable error handling when something wrong with the server

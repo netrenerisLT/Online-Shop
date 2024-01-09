@@ -14,6 +14,7 @@ router.post(
 );
 
 router.get("/products/:id", adminController.getUpdatedProduct);
+
 router.post(
   "/products/:id",
   configuredMulterMiddleware,
