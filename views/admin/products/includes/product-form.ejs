@@ -1,5 +1,5 @@
 <form
-  action="<%= submitPath %>_csrf=<%= locals.csrfToken %>"
+  action="<%= submitPath %>?_csrf=<%= locals.csrfToken %>"
   method="POST"
   enctype="multipart/form-data"
 >
@@ -20,7 +20,9 @@
       id="image"
       name="image"
       accept="image/png, image/jpg"
-      required
+      <% if (imageRequired) { %>
+        required
+      <% } %>
     />
   </p>
   <p>

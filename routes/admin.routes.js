@@ -14,6 +14,10 @@ router.post(
 );
 
 router.get("/products/:id", adminController.getUpdatedProduct);
-router.post("/products/edit/:id", adminController.updateProduct);
+router.post(
+  "/products/:id",
+  configuredMulterMiddleware,
+  adminController.updateProduct
+);
 
 module.exports = router;
