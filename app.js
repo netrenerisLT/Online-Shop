@@ -12,6 +12,7 @@ const addCsrfTokenMiddleware = require("./middlewares/csrf-token"); //4
 const errorHandlerMiddleware = require("./middlewares/error-handler"); //5
 const checkAuthStatusMiddleware = require("./middlewares/check-auth"); //8
 const protectRoutesMiddleware = require("./middlewares/protect-routes"); //10
+const notFoundRoutesMiddleware = require("./middlewares/not-found"); //15
 const cartMiddleware = require("./middlewares/cart"); //11
 const expressSession = require("express-session"); //6
 const createSessionConfig = require("./config/session"); //6
@@ -46,9 +47,10 @@ app.use(productsRoutes);
 app.use(baseRoutes);
 app.use("/cart", cartRoutes);
 
-app.use(protectRoutesMiddleware);
-app.use("/admin", adminRoutes);
-app.use("/orders", ordersRoutes);
+app.use("/admin", protectRoutesMiddleware, adminRoutes);
+app.use("/orders", protectRoutesMiddleware, ordersRoutes);
+
+app.use(notFoundRoutesMiddleware);
 
 // enable error handling when something wrong with the server
 app.use(errorHandlerMiddleware);
