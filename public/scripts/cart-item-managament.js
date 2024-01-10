@@ -44,11 +44,11 @@ async function updateCartItem(event) {
       form.parentElement.querySelector(".cart-item-price");
 
     cartItemTotalPriceElement.textContent =
-      responseData.updatedCartData.updatedItemPrice.toFixed(2);
+      "$" + responseData.updatedCartData.updatedItemPrice.toFixed(2);
   }
 
   cartTotalPriceElement.textContent =
-    responseData.updatedCartData.newTotalPrice.toFixed(2);
+    "$" + responseData.updatedCartData.newTotalPrice.toFixed(2);
 
   cartBadge.textContent = responseData.updatedCartData.newTotalQuantity;
 }

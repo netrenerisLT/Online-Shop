@@ -4,6 +4,7 @@ const productsRoutes = require("./routes/products.routes"); //7
 const baseRoutes = require("./routes/base.routes"); //7
 const adminRoutes = require("./routes/admin.routes"); //9
 const cartRoutes = require("./routes/cart.routes"); //12
+const ordersRoutes = require("./routes/orders.routes"); //14
 const path = require("path"); //3
 const db = require("./data/database"); //3
 const csrf = require("csurf"); //4
@@ -47,6 +48,7 @@ app.use("/cart", cartRoutes);
 
 app.use(protectRoutesMiddleware);
 app.use("/admin", adminRoutes);
+app.use("/orders", ordersRoutes);
 
 // enable error handling when something wrong with the server
 app.use(errorHandlerMiddleware);
